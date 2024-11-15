@@ -6,7 +6,26 @@ class EvenSplitter {
         val reference: T,
         val lower: List<T>,
         val higherOrEqual: List<T>
-    )
+    ) {
+
+        /**
+         * The score of an Even Split result is a value rating how close to half split the operation got.
+         * If either `lower` or `higherOrEqual` is empty, the score is 0.
+         * If `lower` and `higherOrEqual` are the same size, the score is 1.
+         *
+         * @return the split result's score.
+         */
+        fun score(): Float {
+
+            val (smallest, biggest) = if (lower.size < higherOrEqual.size) {
+                lower to higherOrEqual
+            } else {
+                higherOrEqual to lower
+            }
+
+            return smallest.size.toFloat() / biggest.size
+        }
+    }
 
     fun <T> split(list: List<T>, comparator: Comparator<T>): Result<T> {
 
