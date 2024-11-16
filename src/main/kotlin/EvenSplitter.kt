@@ -24,14 +24,14 @@
  * SOFTWARE.
  */
 
-package fr.maxbuster
+package com.github.MaxBuster380
 
 /**
  * # EvenSplitter
  *
  * Splits any list most evenly.
  */
-class EvenSplitter {
+internal class EvenSplitter {
 
     /**
      * # EvenSplitter.Result
@@ -40,17 +40,22 @@ class EvenSplitter {
      *
      * @param T Lists' elements' type.
      *
-     * @param reference Element from the initial list to compare elements with.
      * @param lower Elements from the initial list that are strictly smaller than the `reference` by the comparator.
      * @param higherOrEqual Elements from the initial list that are bigger than or equal to the `reference` by the comparator.
      *
      * @see split
      */
     data class Result<T> (
-        val reference: T,
         val lower: List<T>,
         val higherOrEqual: List<T>
     ) {
+
+        /**
+         * # EvenSplitter.Result.reference
+         *
+         * Element from the initial list to compare elements with.
+         */
+        val reference: T get() = higherOrEqual.first()
 
         /**
          * # EvenSplitter.Result.score
@@ -99,6 +104,29 @@ class EvenSplitter {
             throw Exception("List cannot be empty.")
 
         val sortedList = list.sortedWith(comparator)
+
+        val referenceIndex = findReferenceIndex(sortedList, comparator)
+
+        return Result(
+            lower = sortedList.subList(0, referenceIndex),
+            higherOrEqual = sortedList.subList(referenceIndex, sortedList.size)
+        )
+    }
+
+    /**
+     * # EvenSplitter.findReferenceIndex
+     *
+     * By the `comparator`, finds the index of the element in the `sortedList` that best splits the list.
+     *
+     * @param T `sortedList`'s element type.
+     *
+     * @param sortedList List of elements to split, sorted by the `comparator`.
+     * @param comparator Comparator by which to divide the list's element by.
+     *
+     * @return The index of the element by which the list is best split by.
+     */
+    private fun <T> findReferenceIndex(sortedList: List<T>, comparator: Comparator<T>): Int {
+
         val middle = sortedList[sortedList.size / 2]
         val lowestIndex = firstOccurrenceBinarySearch(sortedList, comparator, middle)
         val highestIndex = lastOccurrenceBinarySearch(sortedList, comparator, middle)
@@ -111,11 +139,7 @@ class EvenSplitter {
             highestIndex + 1
         }
 
-        return Result(
-            reference = sortedList[referenceIndex],
-            lower = sortedList.subList(0, referenceIndex),
-            higherOrEqual = sortedList.subList(referenceIndex, sortedList.size)
-        )
+        return referenceIndex
     }
 
     /**
