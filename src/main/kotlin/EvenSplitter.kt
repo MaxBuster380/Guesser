@@ -1,19 +1,39 @@
 package fr.maxbuster
 
+/**
+ * # EvenSplitter
+ *
+ * Splits any list most evenly.
+ */
 class EvenSplitter {
 
-    data class Result<T>(
+    /**
+     * # EvenSplitter.Result
+     *
+     * Output of the `EvenSplitter.split` methods.
+     *
+     * @param T Lists' elements' type.
+     *
+     * @param reference Element from the initial list to compare elements with.
+     * @param lower Elements from the initial list that are strictly smaller than the `reference` by the comparator.
+     * @param higherOrEqual Elements from the initial list that are bigger than or equal to the `reference` by the comparator.
+     *
+     * @see split
+     */
+    data class Result<T> (
         val reference: T,
         val lower: List<T>,
         val higherOrEqual: List<T>
     ) {
 
         /**
+         * # EvenSplitter.Result.score
+         *
          * The score of an Even Split result is a value rating how close to half split the operation got.
          * If either `lower` or `higherOrEqual` is empty, the score is 0.
          * If `lower` and `higherOrEqual` are the same size, the score is 1.
          *
-         * @return the split result's score.
+         * @return The split result's score.
          */
         fun score(): Float {
 
@@ -27,6 +47,26 @@ class EvenSplitter {
         }
     }
 
+    /**
+     * # EvenSplitter.split
+     *
+     * Based on the `comparator`, places each element of the `list` into one of two lists,
+     * where the first list contains elements smaller than a reference object
+     * and the second list contains elements bigger or equal to that same reference object.
+     * The reference object is chosen so that the sizes of the two lists are as close as possible.
+     *
+     * - The reference object is taken from the initial `list`.
+     * - The two lists concatenated are a permutation of the initial `list`, but do not necessarily give the initial `list`.
+     *
+     * @param T `list`'s element type.
+     *
+     * @param list List of objects to split.
+     * @param comparator Comparator by which to divide the list's element by.
+     *
+     * @return A EvenSplitter.Result instance.
+     *
+     * @see Result
+     */
     fun <T> split(list: List<T>, comparator: Comparator<T>): Result<T> {
 
         if (list.isEmpty())
@@ -52,9 +92,42 @@ class EvenSplitter {
         )
     }
 
+    /**
+     * # EvenSplitter.split
+     *
+     * Places each element of the `list` into one of two lists,
+     * where the first list contains elements smaller than a reference object
+     * and the second list contains elements bigger or equal to that same reference object.
+     * The reference object is chosen so that the sizes of the two lists are as close as possible.
+     *
+     * - The objects implement `Comparable` and are divided by it.
+     * - The reference object is taken from the initial `list`.
+     * - The two lists concatenated are a permutation of the initial `list`, but do not necessarily give the initial `list`.
+     *
+     * @param T `list`'s element type.
+     *
+     * @param list List of objects to split.
+     *
+     * @return A EvenSplitter.Result instance.
+     */
     fun <T : Comparable<T>> split(list: List<T>) =
         split(list) { it1, it2 -> it1.compareTo(it2) }
 
+    @Suppress("KDocUnresolvedReference")
+    /**
+     * # EvenSplitter.firstOccurrenceBinarySearch
+     *
+     * Finds the lowest index for which the `target` object matches the element in the `list` based on the given `comparator`.
+     * Assumes that the `list` is already sorted by the `comparator`. Assumes that such a match exists in the list.
+     *
+     * @param T `list`'s element type.
+     *
+     * @param list List of elements to look into, sorted by the `comparator`.
+     * @param comparator Comparator by which the `list` is sorted and by which `target` must match.
+     * @param target Object template to find the first occurrence of.
+     *
+     * @return The lowest index for which `comparator.compare(list[index], target) = 0`.
+     */
     private fun <T> firstOccurrenceBinarySearch(list: List<T>, comparator: Comparator<T>, target: T): Int {
 
         if (comparator.compare(list.first(), target) == 0)
@@ -82,6 +155,21 @@ class EvenSplitter {
         return lowerBound + 1
     }
 
+    @Suppress("KDocUnresolvedReference")
+    /**
+     * # EvenSplitter.lastOccurrenceBinarySearch
+     *
+     * Finds the highest index for which the `target` object matches the element in the `list` based on the given `comparator`.
+     * Assumes that the `list` is already sorted by the `comparator`. Assumes that such a match exists in the list.
+     *
+     * @param T `list`'s element type.
+     *
+     * @param list List of elements to look into, sorted by the `comparator`.
+     * @param comparator Comparator by which the `list` is sorted and by which `target` must match.
+     * @param target Object template to find the first occurrence of.
+     *
+     * @return The highest index for which `comparator.compare(list[index], target) = 0`.
+     */
     private fun <T> lastOccurrenceBinarySearch(list: List<T>, comparator: Comparator<T>, target: T): Int {
 
         if (comparator.compare(list.last(), target) == 0)
