@@ -195,7 +195,7 @@ class SearchTreeBuilder<T>(
      */
     private fun findBestResult(objects: List<T>): Pair<Comparator<T>, EvenSplitter.Result<T>> {
 
-        val evenSplitter = EvenSplitter()
+        val evenSplitter = EvenSplitter<T>()
 
         val res = comparators
             .map { it to evenSplitter.split(objects, it) }

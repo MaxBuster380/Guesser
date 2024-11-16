@@ -31,8 +31,10 @@ package com.github.MaxBuster380
  * # EvenSplitter
  *
  * Splits any list most evenly.
+ *
+ * @param T Lists' element type.
  */
-internal class EvenSplitter {
+internal class EvenSplitter<T> {
 
     /**
      * # EvenSplitter.Result
@@ -90,8 +92,6 @@ internal class EvenSplitter {
      * - The reference object is taken from the initial `list`.
      * - The two lists concatenated are a permutation of the initial `list`, but do not necessarily give the initial `list`.
      *
-     * @param T `list`'s element type.
-     *
      * @param list List of objects to split.
      * @param comparator Comparator by which to divide the list's element by.
      *
@@ -99,7 +99,7 @@ internal class EvenSplitter {
      *
      * @see Result
      */
-    fun <T> split(list: List<T>, comparator: Comparator<T>): Result<T> {
+    fun split(list: List<T>, comparator: Comparator<T>): Result<T> {
 
         if (list.isEmpty())
             throw Exception("List cannot be empty.")
@@ -119,14 +119,12 @@ internal class EvenSplitter {
      *
      * By the `comparator`, finds the index of the element in the `sortedList` that best splits the list.
      *
-     * @param T `sortedList`'s element type.
-     *
      * @param sortedList List of elements to split, sorted by the `comparator`.
      * @param comparator Comparator by which to divide the list's element by.
      *
      * @return The index of the element by which the list is best split by.
      */
-    private fun <T> findReferenceIndex(sortedList: List<T>, comparator: Comparator<T>): Int {
+    private fun findReferenceIndex(sortedList: List<T>, comparator: Comparator<T>): Int {
 
         val middle = sortedList[sortedList.size / 2]
         val lowestIndex = firstOccurrenceBinarySearch(sortedList, comparator, middle)
@@ -142,27 +140,6 @@ internal class EvenSplitter {
 
         return referenceIndex
     }
-
-    /**
-     * # EvenSplitter.split
-     *
-     * Places each element of the `list` into one of two lists,
-     * where the first list contains elements smaller than a reference object
-     * and the second list contains elements bigger or equal to that same reference object.
-     * The reference object is chosen so that the sizes of the two lists are as close as possible.
-     *
-     * - The objects implement `Comparable` and are divided by it.
-     * - The reference object is taken from the initial `list`.
-     * - The two lists concatenated are a permutation of the initial `list`, but do not necessarily give the initial `list`.
-     *
-     * @param T `list`'s element type.
-     *
-     * @param list List of objects to split.
-     *
-     * @return A EvenSplitter.Result instance.
-     */
-    fun <T : Comparable<T>> split(list: List<T>) =
-        split(list) { it1, it2 -> it1.compareTo(it2) }
 
     @Suppress("KDocUnresolvedReference")
     /**

@@ -31,6 +31,8 @@ import kotlin.test.assertFails
 
 class EvenSplitterTest {
 
+    val intComparator = Comparator<Int> { p0, p1 -> p0.compareTo(p1) }
+
     @Test
     fun case1() {
 
@@ -40,7 +42,7 @@ class EvenSplitterTest {
             higherOrEqual = listOf(2, 2, 2))
         val expectedReference = 2
 
-        val actual = EvenSplitter().split(list)
+        val actual = EvenSplitter<Int>().split(list, intComparator)
         assertEquals(expected, actual)
         assertEquals(expectedReference, actual.reference)
     }
@@ -55,7 +57,7 @@ class EvenSplitterTest {
         )
         val expectedReference = 2
 
-        val actual = EvenSplitter().split(list)
+        val actual = EvenSplitter<Int>().split(list, intComparator)
         assertEquals(expected, actual)
         assertEquals(expectedReference, actual.reference)
     }
@@ -70,7 +72,7 @@ class EvenSplitterTest {
         )
         val expectedReference = 1
 
-        val actual = EvenSplitter().split(list)
+        val actual = EvenSplitter<Int>().split(list, intComparator)
         assertEquals(expected, actual)
         assertEquals(expectedReference, actual.reference)
     }
@@ -85,7 +87,7 @@ class EvenSplitterTest {
         )
         val expectedReference = 1
 
-        val actual = EvenSplitter().split(list)
+        val actual = EvenSplitter<Int>().split(list, intComparator)
         assertEquals(expected, actual)
         assertEquals(expectedReference, actual.reference)
     }
@@ -96,7 +98,7 @@ class EvenSplitterTest {
         val list = listOf<Int>()
 
         assertFails {
-            EvenSplitter().split(list)
+            EvenSplitter<Int>().split(list, intComparator)
         }
 
     }
@@ -111,7 +113,7 @@ class EvenSplitterTest {
         )
         val expectedReference = 1
 
-        val actual = EvenSplitter().split(list)
+        val actual = EvenSplitter<Int>().split(list, intComparator)
         assertEquals(expected, actual)
         assertEquals(expectedReference, actual.reference)
     }
@@ -126,7 +128,7 @@ class EvenSplitterTest {
         )
         val expectedReference = 1
 
-        val actual = EvenSplitter().split(list)
+        val actual = EvenSplitter<Int>().split(list, intComparator)
         assertEquals(expected, actual)
         assertEquals(expectedReference, actual.reference)
     }
@@ -141,7 +143,7 @@ class EvenSplitterTest {
         )
         val expectedReference = 1
 
-        val actual = EvenSplitter().split(list)
+        val actual = EvenSplitter<Int>().split(list, intComparator)
         assertEquals(expected, actual)
         assertEquals(expectedReference, actual.reference)
     }
@@ -156,7 +158,7 @@ class EvenSplitterTest {
         )
         val expectedReference = 1
 
-        val actual = EvenSplitter().split(list)
+        val actual = EvenSplitter<Int>().split(list, intComparator)
         assertEquals(expected, actual)
         assertEquals(expectedReference, actual.reference)
     }
@@ -171,7 +173,7 @@ class EvenSplitterTest {
         )
         val expectedReference = 1
 
-        val actual = EvenSplitter().split(list)
+        val actual = EvenSplitter<Int>().split(list, intComparator)
         assertEquals(expected, actual)
         assertEquals(expectedReference, actual.reference)
     }
@@ -187,7 +189,7 @@ class EvenSplitterTest {
         )
         val expectedReference = 5
 
-        val actual = EvenSplitter().split(list)
+        val actual = EvenSplitter<Int>().split(list, intComparator)
         assertEquals(expected, actual)
         assertEquals(expectedReference, actual.reference)
     }
