@@ -24,6 +24,7 @@
  * SOFTWARE.
  */
 
+@file:Suppress("PackageName")
 package com.github.MaxBuster380
 
 fun main() {
