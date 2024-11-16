@@ -54,7 +54,8 @@ fun main() {
 
         println(splitter.comparator)
         println("? < ${splitter.reference}")
-        println(node)
+        println("# remaining: ${splitter.remaining}")
+        println("depth: ${splitter.depth}")
 
         val answer = readlnOrNull()
 

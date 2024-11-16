@@ -38,6 +38,12 @@ class SearchTreeBuilder<T>(
     private val comparators: List<Comparator<T>>
 ) {
 
+    init {
+
+        if (comparators.isEmpty())
+            throw Exception("comparators is empty.")
+    }
+
     /**
      * # SearchTreeBuilder.BuilderNode
      *
@@ -46,8 +52,12 @@ class SearchTreeBuilder<T>(
      * @param list List to attempt to split.
      */
     private data class BuilderNode<T>(
-        val list: List<T>
-    ): SearchTree.Node<T>
+        val list: List<T>,
+    ) : SearchTree.Node<T> {
+
+        override val remaining: Int get() = list.size
+        override val depth: Int get() = 0
+    }
 
     /**
      * # SearchTreeBuilder.BuilderSplitterNode
@@ -63,17 +73,26 @@ class SearchTreeBuilder<T>(
         val comparator: Comparator<T>,
         val reference: T,
         val lowerNodeIndex: Int,
-        val higherOrEqualNodeIndex: Int
-    ): SearchTree.Node<T>
+        val higherOrEqualNodeIndex: Int,
+        override val remaining: Int,
+    ) : SearchTree.Node<T> {
+
+        override val depth: Int get() = 0
+    }
 
     /**
      * # SearchTreeBuilder.build
      *
-     * @param objects
+     * Creates a search tree to find each element of `objects`
      *
-     * @return
+     * @param objects List of objects to create a tree for.
+     *
+     * @return A search tree.
      */
     fun build(objects: List<T>): SearchTree<T> {
+
+        if (objects.isEmpty())
+            throw Exception("objects is empty.")
 
         val builderTree = treeCreator(objects)
 
@@ -128,7 +147,8 @@ class SearchTreeBuilder<T>(
             comparator = result.first,
             reference = result.second.reference,
             lowerNodeIndex = builderTree.size,
-            higherOrEqualNodeIndex = builderTree.size + 1
+            higherOrEqualNodeIndex = builderTree.size + 1,
+            remaining = currentNode.list.size
         )
 
         builderTree += BuilderNode(result.second.lower)
@@ -166,24 +186,41 @@ class SearchTreeBuilder<T>(
      */
     private fun cleanNode(builderTree: MutableList<SearchTree.Node<T>>, nodeIndex: Int) {
 
-        val currentNode = builderTree[nodeIndex]
+        when (val currentNode = builderTree[nodeIndex]) {
 
-        if (currentNode is BuilderNode) {
-
-            builderTree[nodeIndex] = SearchTree.LeafNode(
-                values = currentNode.list
-            )
+            is BuilderNode -> cleanLeafNode(builderTree, nodeIndex, currentNode)
+            is BuilderSplitterNode -> cleanSplitterNode(builderTree, nodeIndex, currentNode)
         }
+    }
 
-        if (currentNode is BuilderSplitterNode) {
+    private fun cleanLeafNode(
+        builderTree: MutableList<SearchTree.Node<T>>,
+        nodeIndex: Int,
+        currentNode: BuilderNode<T>,
+    ) {
 
-            builderTree[nodeIndex] = SearchTree.SplitterNode(
-                comparator = currentNode.comparator,
-                reference = currentNode.reference,
-                lower = builderTree[currentNode.lowerNodeIndex],
-                higherOrEqual = builderTree[currentNode.higherOrEqualNodeIndex],
-            )
-        }
+        builderTree[nodeIndex] = SearchTree.LeafNode(
+            values = currentNode.list
+        )
+    }
+
+    private fun cleanSplitterNode(
+        builderTree: MutableList<SearchTree.Node<T>>,
+        nodeIndex: Int,
+        currentNode: BuilderSplitterNode<T>,
+    ) {
+
+        val lower = builderTree[currentNode.lowerNodeIndex]
+        val higherOrEqual = builderTree[currentNode.higherOrEqualNodeIndex]
+
+        builderTree[nodeIndex] = SearchTree.SplitterNode(
+            comparator = currentNode.comparator,
+            reference = currentNode.reference,
+            lower = lower,
+            higherOrEqual = higherOrEqual,
+            remaining = lower.remaining + higherOrEqual.remaining,
+            depth = kotlin.math.max(lower.depth, higherOrEqual.depth) + 1
+        )
     }
 
     /**

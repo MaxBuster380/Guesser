@@ -43,7 +43,11 @@ data class SearchTree<T>(
      *
      * @param T
      */
-    interface Node<T>
+    interface Node<T> {
+
+        val remaining: Int
+        val depth: Int
+    }
 
     /**
      * # SearchTree.LeafNode
@@ -52,9 +56,13 @@ data class SearchTree<T>(
      *
      * @param values
      */
-    data class LeafNode<T> (
-        val values: List<T>
-    ): Node<T>
+    data class LeafNode<T>(
+        val values: List<T>,
+    ) : Node<T> {
+
+        override val remaining: Int get() = values.size
+        override val depth: Int get() = 0
+    }
 
     /**
      * # SearchTree.SplitterNode
@@ -66,10 +74,14 @@ data class SearchTree<T>(
      * @param lower
      * @param higherOrEqual
      */
-    data class SplitterNode<T> (
+    data class SplitterNode<T>(
         val comparator: Comparator<T>,
         val reference: T,
         val lower: Node<T>,
-        val higherOrEqual: Node<T>
+        val higherOrEqual: Node<T>,
+        override val remaining: Int,
+        override val depth: Int,
     ): Node<T>
+
+    val depth: Int get() = rootNode.depth
 }

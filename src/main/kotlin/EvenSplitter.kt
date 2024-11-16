@@ -102,7 +102,7 @@ internal class EvenSplitter<T> {
     fun split(list: List<T>, comparator: Comparator<T>): Result<T> {
 
         if (list.isEmpty())
-            throw Exception("List cannot be empty.")
+            throw Exception("list is empty.")
 
         val sortedList = list.sortedWith(comparator)
 
