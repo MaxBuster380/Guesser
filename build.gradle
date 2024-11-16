@@ -28,7 +28,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '2.0.21'
 }
 
-group = 'fr.maxbuster'
+group = 'com.github.MaxBuster380'
 version = '1.0-SNAPSHOT'
 
 repositories {

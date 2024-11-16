@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import fr.maxbuster.SearchTreeBuilder
+import com.github.MaxBuster380.SearchTreeBuilder
 import org.junit.jupiter.api.Test
 
 class SearchTreeBuilderTest {

@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-package fr.maxbuster
+package com.github.MaxBuster380
 
 fun main() {
 
