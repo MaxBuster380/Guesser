@@ -193,4 +193,14 @@ class EvenSplitterTest {
         assertEquals(expected, actual)
         assertEquals(expectedReference, actual.reference)
     }
+
+    @Test
+    fun score() {
+
+        val evenSplitter = EvenSplitter<Int>()
+
+        assertEquals(0f, evenSplitter.split(listOf(0), intComparator).score())
+        assertEquals(0f, evenSplitter.split(listOf(0, 0), intComparator).score())
+        assertEquals(1f, evenSplitter.split(listOf(0, 1), intComparator).score())
+    }
 }
