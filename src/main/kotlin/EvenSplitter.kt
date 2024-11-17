@@ -34,7 +34,7 @@ package com.github.MaxBuster380
  *
  * @param T Lists' element type.
  */
-internal class EvenSplitter<T> {
+class EvenSplitter<T> {
 
     /**
      * # EvenSplitter.Result

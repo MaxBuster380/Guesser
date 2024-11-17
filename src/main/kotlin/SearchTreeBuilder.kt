@@ -27,22 +27,26 @@
 @file:Suppress("PackageName")
 package com.github.MaxBuster380
 
+import com.github.MaxBuster380.comparatorchooser.BestSplitterComparatorChooser
+import com.github.MaxBuster380.comparatorchooser.ComparatorChooser
+
 /**
  * # SearchTreeBuilder
  *
  * @param T
  *
- * @param comparators
+ * @param comparatorChooser
  */
 class SearchTreeBuilder<T>(
-    private val comparators: List<Comparator<T>>
+    private val comparatorChooser: ComparatorChooser<T>,
 ) {
 
-    init {
-
-        if (comparators.isEmpty())
-            throw Exception("comparators is empty.")
-    }
+    /**
+     * @param comparators
+     */
+    constructor(comparators: List<Comparator<T>>) : this(
+        BestSplitterComparatorChooser(comparators)
+    )
 
     /**
      * # SearchTreeBuilder.BuilderNode
@@ -138,7 +142,7 @@ class SearchTreeBuilder<T>(
 
         if (currentNode.list.size <= 1) return
 
-        val result = findBestResult(currentNode.list)
+        val result = comparatorChooser.get(currentNode.list)
 
         val listIsUniform = result.second.score() == 0f
         if (listIsUniform) return
@@ -221,23 +225,5 @@ class SearchTreeBuilder<T>(
             remaining = lower.remaining + higherOrEqual.remaining,
             depth = kotlin.math.max(lower.depth, higherOrEqual.depth) + 1
         )
-    }
-
-    /**
-     * # SearchTreeBuilder.findBestResult
-     *
-     * @param objects
-     *
-     * @return
-     */
-    private fun findBestResult(objects: List<T>): Pair<Comparator<T>, EvenSplitter.Result<T>> {
-
-        val evenSplitter = EvenSplitter<T>()
-
-        val res = comparators
-            .map { it to evenSplitter.split(objects, it) }
-            .maxBy { it.second.score() }
-
-        return res
     }
 }

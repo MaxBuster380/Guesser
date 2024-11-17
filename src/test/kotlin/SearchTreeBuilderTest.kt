@@ -24,27 +24,58 @@
  * SOFTWARE.
  */
 
+import com.github.MaxBuster380.SearchTree
 import com.github.MaxBuster380.SearchTreeBuilder
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class SearchTreeBuilderTest {
+
+
+    private val intComparator = object : Comparator<Int> {
+
+        override fun compare(p0: Int, p1: Int): Int = p0.compareTo(p1)
+
+        override fun toString(): String {
+            return "cmp"
+        }
+    }
 
     @Test
     fun test() {
 
         val list = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
 
-        val intComparator = object: Comparator<Int> {
-
-            override fun compare(p0: Int, p1: Int): Int = p0.compareTo(p1)
-
-            override fun toString(): String {
-                return "cmp"
-            }
-        }
-
         val searchTreeBuilder = SearchTreeBuilder(listOf(intComparator))
 
         println(searchTreeBuilder.build(list))
+    }
+
+    @Test
+    fun case1() {
+
+        val list = listOf(1, 2, 3).shuffled()
+        val searchTreeBuilder = SearchTreeBuilder(listOf(intComparator))
+
+        val expected = SearchTree(
+            SearchTree.SplitterNode(
+                comparator = intComparator,
+                reference = 2,
+                lower = SearchTree.LeafNode(values = listOf(1)),
+                higherOrEqual = SearchTree.SplitterNode(
+                    comparator = intComparator,
+                    reference = 3,
+                    lower = SearchTree.LeafNode(values = listOf(2)),
+                    higherOrEqual = SearchTree.LeafNode(values = listOf(3)),
+                    remaining = 2,
+                    depth = 1
+                ),
+                remaining = 3,
+                depth = 2
+            )
+        )
+        val actual = searchTreeBuilder.build(list)
+
+        assertEquals(expected, actual)
     }
 }
