@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2024 MaxBuster
  *
- * This is the "ComparatorChooser.kt" file from the Guesser project.
+ * This is the "PriorityComparatorChooser.kt" file from the Guesser project.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,20 +24,48 @@
  * SOFTWARE.
  */
 
+@file:Suppress("PackageName")
+
 package com.github.MaxBuster380.comparatorchooser
 
 import com.github.MaxBuster380.EvenSplitter
 
-interface ComparatorChooser<T> {
+class PriorityComparatorChooser<T>(
+    private val priority: ComparatorChooser<T>,
+    private val secondary: ComparatorChooser<T>,
+) : ComparatorChooser<T> {
 
-    /**
-     * # ComparatorChooser.get
-     *
-     * Picks the comparator to use for a given list, then returns it and the list split with it.
-     *
-     * @param objects List to find a comparator for.
-     *
-     * @return A pair of the chosen comparator and the resulting split with it.
-     */
-    fun get(objects: List<T>): Pair<Comparator<T>, EvenSplitter.Result<T>>
+    constructor(
+        priority: List<Comparator<T>>,
+        secondary: ComparatorChooser<T>,
+    ) : this(
+        priority = BestSplitterComparatorChooser(priority),
+        secondary = secondary
+    )
+
+    constructor(
+        priority: ComparatorChooser<T>,
+        secondary: List<Comparator<T>>,
+    ) : this(
+        priority = priority,
+        secondary = BestSplitterComparatorChooser(secondary)
+    )
+
+    constructor(
+        priority: List<Comparator<T>>,
+        secondary: List<Comparator<T>>,
+    ) : this(
+        priority = BestSplitterComparatorChooser(priority),
+        secondary = BestSplitterComparatorChooser(secondary)
+    )
+
+    override fun get(objects: List<T>): Pair<Comparator<T>, EvenSplitter.Result<T>> {
+
+        val priorityResult = priority.get(objects)
+
+        if (priorityResult.second.score() != 0f)
+            return priorityResult
+
+        return secondary.get(objects)
+    }
 }
