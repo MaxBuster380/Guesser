@@ -25,7 +25,7 @@
  */
 
 import com.github.MaxBuster380.EvenSplitter
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFails
 
@@ -202,5 +202,15 @@ class EvenSplitterTest {
         assertEquals(0f, evenSplitter.split(listOf(0), intComparator).score())
         assertEquals(0f, evenSplitter.split(listOf(0, 0), intComparator).score())
         assertEquals(1f, evenSplitter.split(listOf(0, 1), intComparator).score())
+    }
+
+    @Test
+    fun failsSplit() {
+
+        val evenSplitter = EvenSplitter<Int>()
+
+        assertTrue(evenSplitter.split(listOf(0), intComparator).failsSplit())
+        assertTrue(evenSplitter.split(listOf(0, 0), intComparator).failsSplit())
+        assertFalse(evenSplitter.split(listOf(0, 1), intComparator).failsSplit())
     }
 }

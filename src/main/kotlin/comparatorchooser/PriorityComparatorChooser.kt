@@ -63,7 +63,7 @@ class PriorityComparatorChooser<T>(
 
         val priorityResult = priority.get(objects)
 
-        if (priorityResult.second.score() != 0f)
+        if (priorityResult.second.failsSplit())
             return priorityResult
 
         return secondary.get(objects)

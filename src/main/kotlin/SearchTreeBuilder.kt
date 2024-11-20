@@ -106,7 +106,9 @@ class SearchTreeBuilder<T>(
     /**
      * # SearchTreeBuilder.treeCreator
      *
-     * @param initialList
+     * Creates a search tree by splitting a leaf's list until it can no longer.
+     *
+     * @param initialList Elements to create a search tree for.
      *
      * @return
      */
@@ -131,6 +133,9 @@ class SearchTreeBuilder<T>(
     /**
      * # SearchTreeBuilder.completeNode
      *
+     * Splits the node on the given `index` if possible.
+     * "Possible" meaning if the list has at least 2 elements and if the chosen comparator does actually split it.
+     *
      * @param builderTree
      * @param nodeIndex
      */
@@ -142,21 +147,23 @@ class SearchTreeBuilder<T>(
 
         if (currentNode.list.size <= 1) return
 
-        val result = comparatorChooser.get(currentNode.list)
+        val comparatorChoice = comparatorChooser.get(currentNode.list)
+        val splitResult = comparatorChoice.second
 
-        val listIsUniform = result.second.score() == 0f
-        if (listIsUniform) return
+        if (splitResult.failsSplit()) return
+
+        val comparator = comparatorChoice.first
 
         builderTree[nodeIndex] = BuilderSplitterNode(
-            comparator = result.first,
-            reference = result.second.reference,
+            comparator = comparator,
+            reference = splitResult.reference,
+            remaining = currentNode.list.size,
             lowerNodeIndex = builderTree.size,
-            higherOrEqualNodeIndex = builderTree.size + 1,
-            remaining = currentNode.list.size
+            higherOrEqualNodeIndex = builderTree.size + 1
         )
 
-        builderTree += BuilderNode(result.second.lower)
-        builderTree += BuilderNode(result.second.higherOrEqual)
+        builderTree += BuilderNode(splitResult.lower)
+        builderTree += BuilderNode(splitResult.higherOrEqual)
     }
 
     /**

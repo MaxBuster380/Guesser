@@ -79,6 +79,18 @@ class EvenSplitter<T> {
 
             return smallest.size.toFloat() / biggest.size
         }
+
+        /**
+         * # EvenSplitter.Result.failsSplit
+         *
+         * Indicates if the split has failed, meaning if it has not split the original list into two non-empty lists.
+         * This happens if the list is uniform according to the used comparator.
+         * This method returning true is equivalent to `score()` returning `0f`.
+         *
+         * @return true if either `lower` or `higherOrEqual` is empty.
+         */
+        fun failsSplit(): Boolean =
+            lower.isEmpty() // For higherOrEqual to be empty, the split would have to happen on an empty list, which is forbidden by split().
     }
 
     /**
