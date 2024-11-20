@@ -58,7 +58,7 @@ class EvenSplitter<T> {
          *
          * Element from the initial list to compare elements with.
          */
-        val reference: T get() = higherOrEqual.first()
+        val reference: T get() = higherOrEqual.first() // Since higherOrEqual is always non-empty and sorted by the comparator, its first value is always equal to the reference.
 
         /**
          * # EvenSplitter.Result.score
