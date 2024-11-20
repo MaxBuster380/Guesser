@@ -25,7 +25,8 @@
  */
 
 @file:Suppress("PackageName")
-package com.github.MaxBuster380
+
+package com.github.MaxBuster380.comparators
 
 abstract class BooleanComparator<T>: Comparator<T> {
 
