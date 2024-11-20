@@ -156,7 +156,7 @@ class EvenSplitter<T> {
      *
      * @return The lowest index for which `comparator.compare(list[index], target) = 0`.
      */
-    private fun <T> firstOccurrenceBinarySearch(list: List<T>, comparator: Comparator<T>, target: T): Int {
+    private fun firstOccurrenceBinarySearch(list: List<T>, comparator: Comparator<T>, target: T): Int {
 
         if (comparator.compare(list.first(), target) == 0)
             return 0
@@ -198,7 +198,7 @@ class EvenSplitter<T> {
      *
      * @return The highest index for which `comparator.compare(list[index], target) = 0`.
      */
-    private fun <T> lastOccurrenceBinarySearch(list: List<T>, comparator: Comparator<T>, target: T): Int {
+    private fun lastOccurrenceBinarySearch(list: List<T>, comparator: Comparator<T>, target: T): Int {
 
         if (comparator.compare(list.last(), target) == 0)
             return list.lastIndex
