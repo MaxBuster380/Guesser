@@ -28,6 +28,15 @@ package com.github.MaxBuster380.comparatorchooser
 
 import com.github.MaxBuster380.EvenSplitter
 
+/**
+ * # ComparatorChooser
+ *
+ * A comparator chooser analyses a list, chooses a comparator, applies the `EvenSplitter.split` method and returns both the comparator and the split result.
+ *
+ * @param T Lists' elements' type.
+ *
+ * @see EvenSplitter
+ */
 interface ComparatorChooser<T> {
 
     /**
